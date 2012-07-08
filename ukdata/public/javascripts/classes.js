@@ -4,7 +4,7 @@ var Member = Backbone.Model.extend({
 
 var MemberCollection = Backbone.Collection.extend({
 	model:Member,
-	url:"/solr/query/all-members"
+	urlRoot:"/solr/query/all-members/"
 });
 
 var AppView = Backbone.View.extend({
@@ -24,15 +24,29 @@ var MembersView = Backbone.View.extend({
 	initialize: function(){
 		var self = this;
 		this.memberCollection = new MemberCollection();
+		this.memberCollection.itemsPerPage(10);
 		this.memberCollection.fetch({
 			success:function(){
-			self.render();
+				self.render();
 			}
 		});
 	},
 
 	events: {
-		"click li a" : "showMember"
+		"click li.member a" : "showMember",
+		"click ul.pagination li a" : "paginate"
+	},
+
+	paginate: function(e){
+		var self = this;
+		var pageNo = jQuery(e.target).data("pagination-page");
+
+		this.memberCollection.loadPage(pageNo).done(function(){
+			self.render();
+		})
+
+
+		e.preventDefault();
 	},
 
 	showMember: function(e){
@@ -48,16 +62,14 @@ var MembersView = Backbone.View.extend({
 	render:function(){
 
 		var self = this;
-		var cont = jQuery("<ul></ul>");
-
-
-		this.memberCollection.each(function(m){
-			var template = "<li><a class=\"member\" href=\"#\" data-member-id=\"" + m.get("id") + "\">" + m.get("firstname") + "</a></li>";
-
-			cont.append(template);
+		var template = _.loadTemplate("member-list", function(template){
+			
+			var compiled = _.template(template, {memberList: self.memberCollection});
+			
+			jQuery(self.el).html(compiled);
 		});
 
-		jQuery(this.el).html(cont);
+		
 
 	}
 });
@@ -109,9 +121,15 @@ var MyRouter = Backbone.Router.extend({
 });
 
 
+var UKDATA = {};
+UKDATA.Templates = {};
+
 jQuery(document).ready(function(){
 
+	//pre-load
+	_.loadTemplate("pagination");
 
+	Backbone.actAs.Paginatable.init(MemberCollection);
 	window.router = new MyRouter();
 
 	Backbone.history.start({pushState: true});

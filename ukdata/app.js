@@ -47,15 +47,20 @@ app.configure('production', function(){
 // Routes
 
 
-app.get("/solr/query/all-members", function(req, res){
+app.get("/solr/query/all-members/", function(req, res){
 
-  var start = req.params.start || 0;
+  var page = req.query.page;
+  var itemsPerPage = req.query.itemsPerPage;
+
+  var start = (page -1) * itemsPerPage;
 	
-	solrClient.query("*:*", {rows:10, start:start}, function(options, solrRes){
+  
+	solrClient.query("*:*", {rows:itemsPerPage, start:start}, function(options, solrRes){
 
       solrResJ = JSON.parse(solrRes);
       var result = ResponseWriter.writeMember(solrResJ.response.docs);
 
+      res.setHeader("X-Pagination-Total-Results",solrResJ.response.numFound);
 		  res.send(result);
 	})
 
@@ -68,7 +73,6 @@ app.get("/solr/query/member/:id", function(req, res){
 
       solrResJ = JSON.parse(solrRes);
 
-      console.log(solrResJ.responseHeader)
       var result = ResponseWriter.writeMember(solrResJ.response.docs);
 
       res.send(result[0]);

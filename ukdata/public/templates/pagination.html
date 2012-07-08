@@ -1,0 +1,58 @@
+<ul class="pagination">
+	<% 
+
+		if(data.totalPages){
+
+			if(data.currentPage != 1){
+
+				%>
+				<li>
+					<a href="#" data-pagination-page="<%=data.currentPage-1 %>">Previous</a>
+				</li>
+				<%	
+			}
+
+			if(data.totalPages < 10){
+				printNumbers(data.currentPage, data.totalPages);
+			}else{
+				printNumbers(notLowerThan(data.currentPage -5, 1), data.currentPage -1);
+				printNumbers(data.currentPage +1, notHigherThan(data.currentPage + 5, data.totalPages));
+			}
+			
+
+			if(data.currentPage != data.totalPages){
+
+				%>
+				<li>
+					<a href="#" data-pagination-page="<%=data.currentPage+1 %>">Next</a>
+				</li>	
+				<%
+			}
+		}
+	%>
+</ul>
+
+
+<%
+
+	function printNumbers(start, end){
+		for(var i = start; i <= end;i++){
+
+			%>
+				<li>
+					<a data-pagination-page="<%=i%>" href="#"><%=i %></a>
+				</li>
+			<%
+		}
+	}
+
+	function notLowerThan(number, than){
+		return number > than -1? number : than;
+	}
+
+	function notHigherThan(number, than){
+		return number < than +1? number : than;
+	}
+
+
+%>

@@ -1,0 +1,22 @@
+<ul>
+	<%
+		_.each(memberList.models, function(member){			
+
+	%>
+		<li class="member">
+			<a href="#" data-member-id="<%=member.get("id")%>"><%= member.get("firstname") + " " + member.get("surname") %></a>
+
+		</li>
+	<%
+		});
+	%>
+</ul>
+<div class="pagination">
+	<%
+		var c = _.processTemplate("pagination", memberList.paginationInfo()) 
+
+		console.log( typeof c);
+
+		print(c);
+	%>
+</div>
