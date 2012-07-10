@@ -3,14 +3,11 @@
  * Module dependencies.
  */
 
-var express = require('express'),
- 	routes = require('./routes'),
- 	solr = require("solr"),
-  ResponseWriter = require("./ResponseWriter");
+var express = require("express"),
+ 	routes = require("./routes"),
+  log = require("./Logger");
 
-var solrClient = solr.createClient({port:8080});
-
-var app = module.exports = express.createServer();
+var app = express.createServer();
 
 // Configuration
 
@@ -45,47 +42,11 @@ app.configure('production', function(){
   })
 
 // Routes
+app.get("/solr/query/all-members/", routes.solr.allmembers);
 
+app.get("/solr/query/member/:id", routes.solr.member);
 
-app.get("/solr/query/all-members/", function(req, res){
-
-  var page = req.query.page;
-  var itemsPerPage = req.query.itemsPerPage;
-
-  var start = (page -1) * itemsPerPage;
-	
-  
-	solrClient.query("*:*", {rows:itemsPerPage, start:start}, function(options, solrRes){
-
-      solrResJ = JSON.parse(solrRes);
-      var result = ResponseWriter.writeMember(solrResJ.response.docs);
-
-      res.setHeader("X-Pagination-Total-Results",solrResJ.response.numFound);
-		  res.send(result);
-	})
-
-});
-
-app.get("/solr/query/member/:id", function(req, res){
-  
-  var memberId = "\"uk.org.publicwhip/member/" + req.params.id + "\"";
-  solrClient.query("id:" + memberId, {rows:10}, function(options, solrRes){
-
-      solrResJ = JSON.parse(solrRes);
-
-      var result = ResponseWriter.writeMember(solrResJ.response.docs);
-
-      res.send(result[0]);
-  })
-
-});
-
-app.get('*', function(req,res){
-
-    console.log(req.url);
-
-    res.render("index.html", {layout:false});
-});
+app.get('*', routes.index);
 
 app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+log.info("Express server listening on port " + app.address().port + " in " + app.settings.env + " mode");
