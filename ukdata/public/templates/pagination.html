@@ -3,7 +3,7 @@
 
 		if(data.totalPages){
 
-			if(data.currentPage != 1){
+			if(data.previousPage){
 
 				%>
 				<li>
@@ -15,8 +15,9 @@
 			if(data.totalPages < 10){
 				printNumbers(data.currentPage, data.totalPages);
 			}else{
-				printNumbers(notLowerThan(data.currentPage -5, 1), data.currentPage -1);
-				printNumbers(data.currentPage +1, notHigherThan(data.currentPage + 5, data.totalPages));
+				printNumbers(data.currentPage, notLowerThan(data.currentPage -5, 1), data.currentPage -1);
+				printNumbers(data.currentPage, data.currentPage,data.currentPage);
+				printNumbers(data.currentPage, data.currentPage +1, notHigherThan(data.currentPage + 5, data.totalPages));
 			}
 			
 
@@ -35,12 +36,18 @@
 
 <%
 
-	function printNumbers(start, end){
+	function printNumbers(current, start, end){
 		for(var i = start; i <= end;i++){
 
+			var classes = "";
+			if(i == current){
+				classes = "active";
+			}
 			%>
 				<li>
-					<a data-pagination-page="<%=i%>" href="#"><%=i %></a>
+					
+					<a data-pagination-page="<%=i%>" href="#" class="<%=classes%>"><%=i %></a>
+					
 				</li>
 			<%
 		}

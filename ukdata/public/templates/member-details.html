@@ -1,2 +1,30 @@
-<h2>Member details</h2>
-<h3><%= name %></h3>
+<h1 class="row span12"><%= model.get("firstname") %> <%= model.get("surname") %></h1>
+<article class="row span4">
+	<header>
+		<h3>Member details</h3>
+	</header>
+	<table class="table table-bordered table-striped">
+		<tbody>
+			<tr>
+				<td>Party</td>
+				<td><%=model.get("party")%></td>
+			</tr>
+			<tr>
+				<td>Constituency</td>
+				<td><%=model.get("constituency")%></td>
+			</tr>
+			<tr>
+				<td>From</td>
+				<td><%=model.get("fromDate")%></td>
+			</tr>
+			<tr>
+				<td>To</td>
+				<td><%=model.get("toDate")%></td>
+			</tr>
+			<tr>
+				<td>Last Updated</td>
+				<td><%=model.get("timestamp")%></td>
+			</tr>
+		</tbody>
+	</table>
+</article>

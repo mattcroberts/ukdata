@@ -1,4 +1,5 @@
-var log = require("./Logger");
+var log = require("./Logger"),
+	_ = require("underscore");
 
 var ResponseWriter = {
 	memberFromDocs : function (memberDocs){
@@ -26,9 +27,22 @@ var ResponseWriter = {
 
 	processMember: function(memberDoc){
 		var member = {};
+		var mapping = {
+			firstname : "firstname_t",
+			surname : "lastname_t",
+			party : "party_t",
+			constituency : "constituency_t",
+			fromDate : "fromdate_t",
+			toDate : "todate_t",
+			timestamp : "timestamp"
+		};
 		member.id = memberDoc.id.substring(memberDoc.id.lastIndexOf("/") + 1);
-		member.firstname = memberDoc.firstname_t;
-		member.surname = memberDoc.lastname_t;
+		
+		_.each(mapping, function(fieldName, attribute){
+			if(memberDoc[fieldName]){
+				member[attribute] = memberDoc[fieldName];
+			}
+		})
 		return member;
 	},
 

@@ -17,11 +17,18 @@ _.mixin({
 		}
 
 		if(UKDATA.Templates[templateName]){
-			return compilier(UKDATA.Templates[templateName]);
+
+			var compiled = compilier(UKDATA.Templates[templateName]);
+			if(callback){
+				callback(compiled);
+			}
+
+			return compiled;
 		}else if(callback){
 			_.loadTemplate(templateName, function(source){
 				callback(compilier(source));
 			});
+
 		}
 		
 

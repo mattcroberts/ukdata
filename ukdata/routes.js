@@ -29,20 +29,23 @@ module.exports = {
 			},
 
 		allmembers : function(req, res){
+			var groupField = "personId";
+
 			var page = req.query.page;
 			var itemsPerPage = req.query.itemsPerPage;
+			var query = req.query.query || "*:*";
 
 			var start = (page -1) * itemsPerPage;
-			lucifer.search({rows:itemsPerPage, 
+			lucifer.groupedSearch({q:query,
+							rows:itemsPerPage, 
 							start:start,
-							group:true,
-							"group.ngroups" : true,
-							"group.field" : "hansard_id_i"}, 
+							"group.field" : groupField,
+							"group.sort" : "fromdate_t desc"}, 
 							function(err, solrRes){
 
 				var result = ResponseWriter.writeMember(solrRes);
 
-				res.setHeader("X-Pagination-Total-Results",solrRes.grouped["hansard_id_i"].ngroups);
+				res.setHeader("X-Pagination-Total-Results",solrRes.grouped[groupField].ngroups);
 				res.send(result);
 			})
 

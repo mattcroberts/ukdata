@@ -19,10 +19,13 @@ var MembersView = Backbone.View.extend({
 
 	subViews: [],
 
-	el: "#container",
+	el: "#main",
 
 	initialize: function(){
 		var self = this;
+
+		this.$el.empty();
+		
 		this.memberCollection = new MemberCollection();
 		this.memberCollection.itemsPerPage(10);
 		this.memberCollection.fetch({
@@ -34,7 +37,24 @@ var MembersView = Backbone.View.extend({
 
 	events: {
 		"click li.member a" : "showMember",
-		"click ul.pagination li a" : "paginate"
+		"click ul.pagination li a" : "paginate",
+		"keyup input.searchInput" : "memberSearch"
+	},
+
+	memberSearch: function(e){
+		var inputEl = jQuery(e.target);
+
+		var userInput = inputEl.val();
+
+		this.memberCollection.setUrlParam("query", userInput);
+
+		var self = this;
+		this.memberCollection.fetch().done(function(){
+			self.render();
+		});
+
+
+
 	},
 
 	paginate: function(e){
@@ -62,21 +82,35 @@ var MembersView = Backbone.View.extend({
 	render:function(){
 
 		var self = this;
+		if(this.$el.has("input.searchInput").length < 1){
+			this.renderHeader();
+		}
+
 		var template = _.loadTemplate("member-list", function(template){
-			
 			var compiled = _.template(template, {memberList: self.memberCollection});
 			
-			jQuery(self.el).html(compiled);
+			if(jQuery(".content", self.el).length < 1){
+				self.$el.append(self.make("div", {class:"content"}));
+			} 
+
+			jQuery(".content", self.el).html(compiled);
 		});
 
-		
+	},
 
+	renderHeader: function(){
+		console.log("rendering header");
+		var self = this;
+		_.processTemplate("member-list-header", {}, function(template){
+			debugger;
+			self.$el.append(template);
+		});
 	}
 });
 
 var MemberView = Backbone.View.extend({
 
-	el: "#container",
+	el: "#main",
 
 	initialize: function(options){
 		this.options = options;
@@ -85,10 +119,10 @@ var MemberView = Backbone.View.extend({
 	render: function(){
 		var self = this;
 		var viewport = this.make("article",{"id":"viewport"});
-		
+
 		var template = _.loadTemplate("member-details", function(template){
 
-			jQuery(viewport).append(_.template(template,{name: self.model.get("firstname") + " " + self.model.get("surname")}));
+			jQuery(viewport).append(_.template(template,{model:self.model}));
 			jQuery(self.el).html(viewport);
 		});
 		
