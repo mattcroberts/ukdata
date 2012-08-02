@@ -102,7 +102,6 @@ var MembersView = Backbone.View.extend({
 		console.log("rendering header");
 		var self = this;
 		_.processTemplate("member-list-header", {}, function(template){
-			debugger;
 			self.$el.append(template);
 		});
 	}
