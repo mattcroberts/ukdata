@@ -86,7 +86,7 @@ var MembersView = Backbone.View.extend({
 			this.renderHeader();
 		}
 
-		var template = _.processTemplate("member-list", {memberList: self.memberCollection}, function(compiled){
+		_.processTemplate("member-list", {memberList: self.memberCollection}, function(compiled){
 
 			if(jQuery(".content", self.el).length < 1){
 				self.$el.append(self.make("div", {class:"content"}));
