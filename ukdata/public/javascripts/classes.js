@@ -86,9 +86,8 @@ var MembersView = Backbone.View.extend({
 			this.renderHeader();
 		}
 
-		var template = _.loadTemplate("member-list", function(template){
-			var compiled = _.template(template, {memberList: self.memberCollection});
-			
+		var template = _.processTemplate("member-list", {memberList: self.memberCollection}, function(compiled){
+
 			if(jQuery(".content", self.el).length < 1){
 				self.$el.append(self.make("div", {class:"content"}));
 			} 
@@ -119,9 +118,9 @@ var MemberView = Backbone.View.extend({
 		var self = this;
 		var viewport = this.make("article",{"id":"viewport"});
 
-		var template = _.loadTemplate("member-details", function(template){
+		_.processTemplate("member-details", {model:self.model}, function(compiled){
 
-			jQuery(viewport).append(_.template(template,{model:self.model}));
+			jQuery(viewport).append(compiled);
 			jQuery(self.el).html(viewport);
 		});
 		

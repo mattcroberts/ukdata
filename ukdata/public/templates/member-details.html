@@ -1,4 +1,4 @@
-<h1 class="row span12"><%= model.get("firstname") %> <%= model.get("surname") %></h1>
+<h1 class="row span12"><%= data.model.get("firstname") %> <%= data.model.get("surname") %></h1>
 <article class="row span4">
 	<header>
 		<h3>Member details</h3>
@@ -7,23 +7,23 @@
 		<tbody>
 			<tr>
 				<td>Party</td>
-				<td><%=model.get("party")%></td>
+				<td><%=data.model.get("party")%></td>
 			</tr>
 			<tr>
 				<td>Constituency</td>
-				<td><%=model.get("constituency")%></td>
+				<td><%=data.model.get("constituency")%></td>
 			</tr>
 			<tr>
 				<td>From</td>
-				<td><%=model.get("fromDate")%></td>
+				<td><%=data.model.get("fromDate")%></td>
 			</tr>
 			<tr>
 				<td>To</td>
-				<td><%=model.get("toDate")%></td>
+				<td><%=data.model.get("toDate")%></td>
 			</tr>
 			<tr>
 				<td>Last Updated</td>
-				<td><%=model.get("timestamp")%></td>
+				<td><%=data.model.get("timestamp")%></td>
 			</tr>
 		</tbody>
 	</table>

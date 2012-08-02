@@ -1,7 +1,7 @@
-<p><%=memberList.paginationInfo().totalItems %> members found:</p>
+<p><%=data.memberList.paginationInfo().totalItems %> members found:</p>
 <ul>
 	<%
-		_.each(memberList.models, function(member){			
+		_.each(data.memberList.models, function(member){			
 
 	%>
 		<li class="member">
@@ -14,7 +14,7 @@
 </ul>
 <div class="pagination">
 	<%
-		var c = _.processTemplate("pagination", memberList.paginationInfo());
+		var c = _.processTemplate("pagination", data.memberList.paginationInfo());
 
 		print(c);
 	%>
