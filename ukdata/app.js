@@ -41,7 +41,7 @@ app.get("/solr/query/all-members/", routes.solr.allmembers);
 
 app.get("/solr/query/member/:id", routes.solr.member);
 
-app.get('/', routes.index);
+app.get("*", routes.index);
 
 app.listen(3000);
 log.info("Express server listening on port " + app.address().port + " in " + app.settings.env + " mode");
