@@ -1,4 +1,3 @@
-
 <p><%=memberList.paginationInfo().totalItems %> members found:</p>
 <ul>
 	<%
@@ -15,9 +14,7 @@
 </ul>
 <div class="pagination">
 	<%
-		var c = _.processTemplate("pagination", memberList.paginationInfo()) 
-
-		console.log( typeof c);
+		var c = _.processTemplate("pagination", memberList.paginationInfo());
 
 		print(c);
 	%>

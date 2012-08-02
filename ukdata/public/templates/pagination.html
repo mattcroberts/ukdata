@@ -1,6 +1,5 @@
 <ul class="pagination">
 	<% 
-
 		if(data.totalPages){
 
 			if(data.previousPage){
@@ -12,14 +11,8 @@
 				<%	
 			}
 
-			if(data.totalPages < 10){
-				printNumbers(data.currentPage, data.totalPages);
-			}else{
-				printNumbers(data.currentPage, notLowerThan(data.currentPage -5, 1), data.currentPage -1);
-				printNumbers(data.currentPage, data.currentPage,data.currentPage);
-				printNumbers(data.currentPage, data.currentPage +1, notHigherThan(data.currentPage + 5, data.totalPages));
-			}
-			
+			var pageNumbers = generatePageNumbers(data.currentPage, data.totalPages);
+			printNumbers(data.currentPage, pageNumbers);
 
 			if(data.currentPage != data.totalPages){
 
@@ -36,30 +29,49 @@
 
 <%
 
-	function printNumbers(current, start, end){
-		for(var i = start; i <= end;i++){
+	function generatePageNumbers(currentPage, totalPages){
+		var middleArr = _.range(currentPage - 2, currentPage + 3);
 
+		var pageNumbers = [];
+		
+		pageNumbers.push(1);
+		pageNumbers = pageNumbers.concat(middleArr);
+		pageNumbers.push(totalPages);
+
+		pageNumbers = sanitizePageNumbers(pageNumbers, totalPages);
+		return pageNumbers;
+	}
+
+	function sanitizePageNumbers(numbersArr, numberOfPages){
+
+		numbersArr = _.filter(numbersArr, function(num){
+			return num > 0;
+		});
+
+		numbersArr = _.filter(numbersArr, function(num){
+			return num <= numberOfPages;
+		});
+
+		return _.uniq(numbersArr);
+	}
+
+	function printNumbers(current, numbers){
+		
+		for(var i = 0; i <= numbers.length;i++){
+			if(numbers.hasOwnProperty(i)){
 			var classes = "";
-			if(i == current){
+			if(numbers[i] == current){
 				classes = "active";
 			}
 			%>
-				<li>
+				<li class="<%=classes%>">
 					
-					<a data-pagination-page="<%=i%>" href="#" class="<%=classes%>"><%=i %></a>
+					<a data-pagination-page="<%=numbers[i]%>" href="#"><%=numbers[i] %></a>
 					
 				</li>
 			<%
+			}
 		}
 	}
-
-	function notLowerThan(number, than){
-		return number > than -1? number : than;
-	}
-
-	function notHigherThan(number, than){
-		return number < than +1? number : than;
-	}
-
 
 %>
