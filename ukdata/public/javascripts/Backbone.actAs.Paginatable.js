@@ -4,6 +4,10 @@ Backbone.actAs.Paginatable = {
 	init: function(collection, model){
 		collection	= collection || Backbone.Collection;
 		model		= model || Backbone.Model;
+
+		//copy the custom parse function (if any)
+		collection.prototype.customParse = collection.prototype.parse;
+
 		_.extend(collection.prototype, Backbone.actAs.Paginatable.Collection);
 		_.extend(model.prototype, Backbone.actAs.Paginatable.Model);
 	}
@@ -149,6 +153,10 @@ Backbone.actAs.Paginatable.Collection = (function(){
 		parse: function(resp, result) {
 			if( result.getResponseHeader('X-Pagination-Total-Results') ){
 				this.actAs_Paginatable_totalItems = result.getResponseHeader('X-Pagination-Total-Results');
+			}
+
+			if(this.customParse){
+				return this.customParse(resp);
 			}
 			return resp;
 		}

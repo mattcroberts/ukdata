@@ -1,0 +1,10 @@
+<h3>Speeches</h3>
+<%
+	data.speeches.each(function(speech){
+%>
+<p class="speech">
+<%= speech.get("content_t") %>
+</p>
+<%
+	});
+%>

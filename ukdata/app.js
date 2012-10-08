@@ -38,7 +38,7 @@ app.register('.html', {
 
 // Routes
 app.get("/solr/query/all-members/", routes.solr.allmembers);
-
+app.get("/solr/query/member-speeches/", routes.solr.memberSpeeches);
 app.get("/solr/query/member/:id", routes.solr.member);
 
 app.get("*", routes.index);

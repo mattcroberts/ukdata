@@ -21,9 +21,9 @@ module.exports = {
 			  var memberId = "\"uk.org.publicwhip/member/" + req.params.id + "\"";
 			  lucifer.search({q:"id:" + memberId}, function(err, solrRes){
 
-			      var result = ResponseWriter.writeMember(solrRes);
+			      var response = ResponseWriter.writeMember(solrRes);
 
-			      res.send(result[0]);
+			      res.send(response);
 			  })
 
 			},
@@ -33,7 +33,7 @@ module.exports = {
 
 			var page = req.query.page;
 			var itemsPerPage = req.query.itemsPerPage;
-			var query = req.query.query || "*:*";
+			var query = (req.query.query || "*:*") + " AND ukdType:member";
 
 			var start = (page -1) * itemsPerPage;
 			lucifer.groupedSearch({q:query,
@@ -49,6 +49,17 @@ module.exports = {
 				res.send(result);
 			})
 
+		},
+
+		memberSpeeches: function(req, res){
+	
+
+			lucifer.join("id", "memberId", "id:\"uk.org.publicwhip/member/" + req.query.memberId + "\"", function(err, solrRes){
+				var result = ResponseWriter.writeSpeeches(solrRes);
+
+				res.setHeader("X-Pagination-Total-Results",solrRes.response.numFound);
+				res.send(result);
+			})
 		}
 	}
 };

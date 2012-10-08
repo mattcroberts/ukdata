@@ -47,15 +47,58 @@ var ResponseWriter = {
 	},
 
 	writeMember: function(solrResp){
-		log.debug("Parsing", solrResp);
+
+		var response = {response:{
+							header:{},
+							data:{},
+							metadata:{}}};
+
+		response.response.header = this.generateResponseHeader(solrResp);
+		response.response.metadata = this.generateResponseMetadata(solrResp);
+
 		if(solrResp.responseHeader.params.group){
 			var groupField = solrResp.responseHeader.params["group.field"];
-			return this.memberFromGroups(solrResp.grouped[groupField].groups);
+			response.response.data.members =  this.memberFromGroups(solrResp.grouped[groupField].groups);
 		}else{
-			return this.memberFromDocs(solrResp.response.docs);
+			response.response.data.members =  this.memberFromDocs(solrResp.response.docs);
 		}
 
-		return null;
+		
+		return response;
+
+	},
+
+	writeSpeeches: function(solrResp){
+		var response = {response:{
+							header:{},
+							data:{},
+							metadata:{}}};
+
+		response.response.header = this.generateResponseHeader(solrResp);
+		response.response.metadata = this.generateResponseMetadata(solrResp);
+		response.response.data.speeches = [];
+
+		debugger;
+		solrResp.response.docs.forEach(function(speechDoc){
+			response.response.data.speeches.push(speechDoc);
+		})
+
+		return response;
+	},
+
+	generateResponseHeader: function(solrResp){},
+	generateResponseMetadata: function(solrResp){
+		var metadata = {};
+
+		if(solrResp["facet_counts"]){
+			metadata.facets = {"fields":{}};
+
+			solrResp["facet_counts"]["facet_fields"].forEach(function(facet, facetName){
+				metadata.facets.fields[facetName] = facet;
+			});
+			
+		}
+		
 
 	}
 };

@@ -1,11 +1,38 @@
 var Member = Backbone.Model.extend({
-	urlRoot:"/solr/query/member"
+	urlRoot:"/solr/query/member",
+
+	parse: function(response){
+
+		if(response.response){
+			return response.response.data.members[0];	
+		}else{
+			return response;
+		}
+		
+	}
 });
 
 var MemberCollection = Backbone.Collection.extend({
 	model:Member,
-	urlRoot:"/solr/query/all-members/"
+	urlRoot:"/solr/query/all-members/",
+
+	parse: function(response){
+		return response.response.data.members;
+	}
 });
+
+var Speech = Backbone.Model.extend({
+	urlRoot:"/solr/query/speech"
+});
+
+var SpeechCollection = Backbone.Collection.extend({
+	model:Speech,
+	urlRoot:"/solr/query/member-speeches/",
+
+	parse: function(response){
+		return response.response.data.speeches;
+	}
+})
 
 var AppView = Backbone.View.extend({
 
@@ -124,8 +151,18 @@ var MemberView = Backbone.View.extend({
 			jQuery(self.el).html(viewport);
 		});
 		
-		
+		var speeches = new SpeechCollection();
+		speeches.setUrlParam("memberId", this.model.get("id"));
+
+		//render speeches
+		speeches.fetch().then(function(){
+			_.processTemplate("member-speeches", {speeches:speeches},function(compiled){
+				self.$el.find("#speeches").html(compiled);
+			})
+		});
 	}
+		
+
 });
 
 var MyRouter = Backbone.Router.extend({
@@ -141,6 +178,7 @@ var MyRouter = Backbone.Router.extend({
 
 		var mv = new MemberView();
 		member.fetch({success: function(data){
+
 			mv.model = data;
 			mv.render();
 		}})
@@ -162,6 +200,7 @@ jQuery(document).ready(function(){
 	_.loadTemplate("pagination");
 
 	Backbone.actAs.Paginatable.init(MemberCollection);
+	Backbone.actAs.Paginatable.init(SpeechCollection);
 	window.router = new MyRouter();
 
 	Backbone.history.start({pushState: true});

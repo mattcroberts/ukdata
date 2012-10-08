@@ -6,13 +6,14 @@ var log = new (winston.Logger)({
         level: "warn",
         json:false,
         colorize: true,
-        prettyPrint:true
+        prettyPrint:true,
+        handleExceptions:true
       }),
       new (winston.transports.File)({ 
         filename: "ukdata.log",
         level:"silly",
         json:false,
-        maxSize: 1 * 1024 * 1024, //1mb
+        maxsize: 1 * 1024 * 1024, //1mb
         prettyPrint:true,
         handleExceptions:true })
     ]
