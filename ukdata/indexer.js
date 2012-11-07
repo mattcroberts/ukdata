@@ -4,8 +4,7 @@ var log = require("./Logger");
 var lucifer = require("./Lucifer");
 var htmlparser = require("htmlparser");
 var async = require("async");
-var cluster = require("cluster");
-var os = require("os");
+var _ = require("underscore");
 
 var jobPath = process.argv[process.argv.length -1];
 var Job = require(jobPath);
@@ -19,20 +18,17 @@ var Indexer = {
 				log.debug("Indexer", err);
 			}
 
-			var batches = splitArray(files, batchSize);
-			log.debug("Indexer", "Created " + batches.length + " batches");
-			var batch = batches.shift();
 			var batchResult = [];
 			log.debug("indexer Setting up queue");
 			var q = async.queue(function(){
 
 				//convert to real array
 				var args = Array.prototype.slice.call(arguments);
-
 				jobInstance.worker.apply(jobInstance, args.concat(function add(jobResult){
 					batchResult = batchResult.concat(jobResult);
-				}));
-			}, 1);
+				}));					
+				
+			}, 2);
 
 			q.drain = function() {
 				log.debug("Indexer", "Drained");
@@ -56,6 +52,9 @@ var Indexer = {
 			};
 
 
+			var batches = splitArray(files, batchSize).reverse();
+			log.debug("Indexer", "Created " + batches.length + " batches");
+			var batch = batches.shift();
 			q.push(batch);
 		});
 	},

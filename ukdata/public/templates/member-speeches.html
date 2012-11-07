@@ -2,9 +2,13 @@
 <%
 	data.speeches.each(function(speech){
 %>
-<p class="speech">
-<%= speech.get("content_t") %>
-</p>
+<article class="speech" data-id="<%= speech.get("id") %>">
+	<h5>Date: <%= speech.get("group_s").replace(/[a-z]/gi,"") %> <a href="#">See in context</a></h5>
+	
+	<p>
+	<%= speech.get("content_t") %>
+	</p>
+</article>
 <%
 	});
 %>

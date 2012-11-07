@@ -53,8 +53,12 @@ module.exports = {
 
 		memberSpeeches: function(req, res){
 	
+			var searchOptions = {};
+			searchOptions.fq = "memberId:\"uk.org.publicwhip/member/" + req.query.memberId + "\"";
+			searchOptions.rows = 100;
+			searchOptions.sort = "group_s desc";
 
-			lucifer.join("id", "memberId", "id:\"uk.org.publicwhip/member/" + req.query.memberId + "\"", function(err, solrRes){
+			lucifer.search(searchOptions, function(err, solrRes){
 				var result = ResponseWriter.writeSpeeches(solrRes);
 
 				res.setHeader("X-Pagination-Total-Results",solrRes.response.numFound);

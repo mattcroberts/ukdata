@@ -8,36 +8,7 @@ var solr = require("solr").createClient({port:8080}),
 
 var Lucifer = {
 
-	addSpeech: function(speechId, memberId, content){
-
-		var doc = {
-			id: speechId,
-			ukdType: "speech",
-			memberId: memberId,
-			content_t: content
-		};
-
-		log.debug("Adding speech", doc)
-		this._add([doc]);
-	},
-
-	addSpeeches: function(speeches){
-		var docs = [];
-		speeches.forEach(function(speech){
-
-			var doc = {
-				id: speech.id,
-				ukdType: "speech",
-				memberId: speech.speakerId,
-				content_t: speech.content
-			};
-
-			docs.push(doc);
-		});
-		this._add(docs);
-	},
-
-	_add: function(docs){
+	addDocs: function(docs){
 
 		log.debug("Lucifer Adding docs", docs.length);
 		var options = {
