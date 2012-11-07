@@ -1,9 +1,9 @@
 <h3>Speeches</h3>
 <%
-	data.speeches.each(function(speech){
+	speeches.each(function(speech){
 %>
-<article class="speech" data-id="<%= speech.get("id") %>">
-	<h5>Date: <%= speech.get("group_s").replace(/[a-z]/gi,"") %> <a href="#">See in context</a></h5>
+<article class="speech" data-speech-id="<%= speech.get("id") %>">
+	<h5>Date: <%= speech.get("group_s").replace(/[a-z]/gi,"") %> <a href="#" class="contextLink">See in context</a></h5>
 	
 	<p>
 	<%= speech.get("content_t") %>
@@ -11,4 +11,10 @@
 </article>
 <%
 	});
+
+	if(speeches.length == 0){
+		%>
+		<p>Sorry, no speeches were found</p>
+		<%
+	}
 %>

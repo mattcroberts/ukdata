@@ -1,24 +1,24 @@
 <ul class="pagination">
 	<% 
-		if(data.totalPages){
+		if(totalPages){
 
-			if(data.previousPage){
+			if(previousPage){
 
 				%>
 				<li>
-					<a href="#" data-pagination-page="<%=data.currentPage-1 %>">Previous</a>
+					<a href="#" data-pagination-page="<%=currentPage-1 %>">Previous</a>
 				</li>
 				<%	
 			}
 
-			var pageNumbers = generatePageNumbers(data.currentPage, data.totalPages);
-			printNumbers(data.currentPage, pageNumbers);
+			var pageNumbers = generatePageNumbers(currentPage, totalPages);
+			printNumbers(currentPage, pageNumbers);
 
-			if(data.currentPage != data.totalPages){
+			if(currentPage != totalPages){
 
 				%>
 				<li>
-					<a href="#" data-pagination-page="<%=data.currentPage+1 %>">Next</a>
+					<a href="#" data-pagination-page="<%=currentPage+1 %>">Next</a>
 				</li>	
 				<%
 			}

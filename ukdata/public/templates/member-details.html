@@ -1,29 +1,29 @@
-<h1 class="row span12"><%= data.model.get("firstname") %> <%= data.model.get("surname") %></h1>
-<article class="row span4">
-	<header>
+<article class="row span11">
+	<h1 class="row span11"><%= model.get("firstname") %> <%= model.get("surname") %></h1>
+	<header class="span11">
 		<h3>Member details</h3>
 	</header>
-	<table class="table table-bordered table-striped">
+	<table class="span11 table table-bordered table-striped">
 		<tbody>
 			<tr>
 				<td>Party</td>
-				<td><%=data.model.get("party")%></td>
+				<td><%=model.get("party")%></td>
 			</tr>
 			<tr>
 				<td>Constituency</td>
-				<td><%=data.model.get("constituency")%></td>
+				<td><%=model.get("constituency")%></td>
 			</tr>
 			<tr>
 				<td>From</td>
-				<td><%=data.model.get("fromDate")%></td>
+				<td><%=model.get("fromDate")%></td>
 			</tr>
 			<tr>
 				<td>To</td>
-				<td><%=data.model.get("toDate")%></td>
+				<td><%=model.get("toDate")%></td>
 			</tr>
 			<tr>
 				<td>Last Updated</td>
-				<td><%=data.model.get("timestamp")%></td>
+				<td><%=model.get("timestamp")%></td>
 			</tr>
 		</tbody>
 	</table>
