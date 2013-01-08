@@ -18,6 +18,7 @@ define([
 			},
 
 			member: function(id){
+				var self = this;
 				console.log("show member "+ id);
 				var member = new Member({"id":id});
 
@@ -26,12 +27,29 @@ define([
 
 					mv.model = data;
 					mv.render();
+
+					self.showView(mv);
 				}})
 				
 			},
 
 			defaultAction: function(actions){
 				var memberSearch = new MemberSearch();
+				memberSearch.render();
+				this.showView(memberSearch);
+				
+			},
+
+			showView: function(view){
+
+				if(this.currentView){
+					this.currentView.remove();
+					this.currentView.unbind();
+				}
+
+				this.currentView = view;
+				
+				jQuery(".content.container").append(view.el);
 			}
 		});
 

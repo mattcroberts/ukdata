@@ -11,7 +11,7 @@ define([
 
 		subViews: [],
 
-		el: "#main",
+		id: "main",
 
 		initialize: function(){
 			var self = this;
@@ -63,6 +63,8 @@ define([
 			var anchor = jQuery(e.target);
 
 			var id = anchor.data("member-id");
+			
+			this.remove();
 
 			Backbone.history.navigate("member/" + id,{trigger:true});
 

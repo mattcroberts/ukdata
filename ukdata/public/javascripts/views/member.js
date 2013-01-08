@@ -8,7 +8,7 @@ define([
 	function(Backbone, _, jQuery, SpeechCollection, TmemberDetails, TmemberSpeeches){
 		var MemberView = Backbone.View.extend({
 
-		el: "#main",
+		id: "#main",
 
 		initialize: function(options){
 			this.options = options;
@@ -23,8 +23,7 @@ define([
 
 			var memberHtml = _.template(TmemberDetails,{model:self.model});
 
-			jQuery(this.el).append(memberHtml);
-			
+			this.$el.append(memberHtml);
 			
 			var speeches = new SpeechCollection();
 			speeches.setUrlParam("memberId", this.model.get("id"));
