@@ -3,9 +3,10 @@ define([
 	"backbone",
 	"models/member",
 	"views/member", 
-	"views/member-search"
+	"views/member-search",
+	"views/error"
 	], 
-	function(_, Backbone, Member, MemberView, MemberSearch){
+	function(_, Backbone, Member, MemberView, MemberSearch, ErrorView){
 		var MyRouter = Backbone.Router.extend({
 
 			initialize: function(){
@@ -14,7 +15,8 @@ define([
 			
 			routes:{
 				"member/:id":"member",
-				"*actions":"defaultAction"
+				"":"index",
+				"*actions":"pageNotFound"
 			},
 
 			member: function(id){
@@ -33,11 +35,20 @@ define([
 				
 			},
 
-			defaultAction: function(actions){
+			index: function(actions){
 				var memberSearch = new MemberSearch();
 				memberSearch.render();
 				this.showView(memberSearch);
 				
+			},
+
+			pageNotFound: function(){
+				var errorView = new ErrorView({
+					code:404
+				});
+
+				errorView.render();
+				this.showView(errorView);
 			},
 
 			showView: function(view){
@@ -48,7 +59,7 @@ define([
 				}
 
 				this.currentView = view;
-				
+
 				jQuery(".content.container").append(view.el);
 			}
 		});
